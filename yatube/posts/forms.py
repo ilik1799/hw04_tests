@@ -4,12 +4,10 @@ from .models import Post
 
 
 class PostForm(forms.ModelForm):
-
     class Meta:
         model = Post
-        fields = ('group', 'text')
-
+        fields = ['text', 'group']
         help_texts = {
             'text': 'Текст нового поста',
-            'group': 'Группа, к которой будет относится пост',
+            'group': 'Группа, к которой будет относиться пост',
         }

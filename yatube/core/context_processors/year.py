@@ -1,12 +1,5 @@
-from django.shortcuts import render
-
-from datetime import datetime
+import datetime as dt
 
 
 def year(request):
-    """Добавляет переменную с текущим годом."""
-    now = datetime.now().year
-    context = {
-        'year': now,
-    }
-    return render(request, context)
+    return {'year': dt.datetime.now().date().year}
