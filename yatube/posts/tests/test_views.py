@@ -5,15 +5,17 @@ from django.urls import reverse
 
 from ..models import Group, Post, User
 
-
-POST_TEXT = 'Тестовый текст'
-
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')
 GROUP = reverse('posts:group_list',
                 kwargs={'slug': settings.SLUG})
 PROFILE = reverse('posts:profile',
                   kwargs={'username': settings.USER_NAME})
+USER_NAME = 'TestAuthor'
+GROUP_SECOND_TITLE = 'Тестовая группа-2'
+SLUG_2 = 'test_slug_2'
+DESCRIPTION_2 = 'Тестовое описание-2'
+POST_TEXT = 'Тестовый текст'
 
 
 class PostsPagesTests(TestCase):
@@ -26,6 +28,11 @@ class PostsPagesTests(TestCase):
             title=settings.GROUP_TITLE,
             slug=settings.SLUG,
             description=settings.DESCRIPTION
+        )
+        cls.groupSecond = Group.objects.create(
+            title=GROUP_SECOND_TITLE,
+            slug=SLUG_2,
+            description=DESCRIPTION_2
         )
         cls.post = Post.objects.create(
             author=cls.author,
