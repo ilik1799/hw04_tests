@@ -7,7 +7,6 @@ from django.urls import reverse
 
 from ..models import Group, Post, User
 
-
 User = get_user_model()
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')

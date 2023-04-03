@@ -5,29 +5,27 @@ from django.urls import reverse
 
 from ..models import Group, Post, User
 
-GROUP_TITLE = 'Тестовая группа'
-SLUG = 'test_slug'
-DESCRIPTION = 'Тестовое описание'
+
 POST_TEXT = 'Тестовый текст'
 
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')
 GROUP = reverse('posts:group_list',
-                kwargs={'slug': SLUG})
+                kwargs={'slug': settings.SLUG})
 PROFILE = reverse('posts:profile',
-                  kwargs={'username': 'TestAuthor'})
+                  kwargs={'username': settings.USER_NAME})
 
 
 class PostsPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.author = User.objects.create(username='TestAuthor')
+        cls.author = User.objects.create(username=settings.USER_NAME)
         cls.user = User.objects.create(username='TestUser')
         cls.group = Group.objects.create(
-            title=GROUP_TITLE,
-            slug=SLUG,
-            description=DESCRIPTION
+            title=settings.GROUP_TITLE,
+            slug=settings.SLUG,
+            description=settings.DESCRIPTION
         )
         cls.post = Post.objects.create(
             author=cls.author,
@@ -128,7 +126,7 @@ class PostsPagesTests(TestCase):
         """Проверка отсутстствия постов не в той группе"""
         urls = (
             reverse('posts:group_list', kwargs={
-                'slug': self.groupSecond.slug}),
+                'slug': self.group.slug}),
             reverse('posts:profile', kwargs={'username': self.user.username})
         )
         for url in urls:
@@ -151,11 +149,11 @@ class PaginatorViewTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.author = User.objects.create(username='TestAuthor')
+        cls.author = User.objects.create(username=settings.USER_NAME)
         cls.group = Group.objects.create(
-            title=GROUP_TITLE,
-            slug=SLUG,
-            description=DESCRIPTION
+            title=settings.GROUP_TITLE,
+            slug=settings.SLUG,
+            description=settings.DESCRIPTION
         )
         posts = (Post(
             text=POST_TEXT,
