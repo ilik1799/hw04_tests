@@ -1,6 +1,5 @@
-from django.conf import settings
+from . import _config_tests
 from django.test import TestCase
-
 from ..models import Group, Post, User
 
 
@@ -9,16 +8,16 @@ class PostModelTest(TestCase):
     def setUpClass(cls) -> None:
         super().setUpClass()
         cls.author = User.objects.create(
-            username=settings.USER_NAME
+            username=_config_tests.USER_NAME
         )
         cls.group = Group.objects.create(
-            title=settings.GROUP_TITLE,
-            slug=settings.SLUG,
-            description=settings.DESCRIPTION
+            title=_config_tests.GROUP_TITLE,
+            slug=_config_tests.SLUG,
+            description=_config_tests.DESCRIPTION
         )
         cls.post = Post.objects.create(
             author=cls.author,
-            text=settings.POST_TEXT,
+            text=_config_tests.POST_TEXT,
         )
 
     def test_models_have_correct_object_names(self):

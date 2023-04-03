@@ -1,42 +1,38 @@
-from django import forms
+from . import _config_tests
 from django.conf import settings
+from django import forms
 from django.test import Client, TestCase
 from django.urls import reverse
-
 from ..models import Group, Post, User
+
 
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')
 GROUP = reverse('posts:group_list',
-                kwargs={'slug': settings.SLUG})
+                kwargs={'slug': _config_tests.SLUG})
 PROFILE = reverse('posts:profile',
-                  kwargs={'username': settings.USER_NAME})
-USER_NAME = 'TestAuthor'
-GROUP_SECOND_TITLE = 'Тестовая группа-2'
-SLUG_2 = 'test_slug_2'
-DESCRIPTION_2 = 'Тестовое описание-2'
-POST_TEXT = 'Тестовый текст'
+                  kwargs={'username': _config_tests.USER_NAME})
 
 
 class PostsPagesTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.author = User.objects.create(username=settings.USER_NAME)
+        cls.author = User.objects.create(username=_config_tests.USER_NAME)
         cls.user = User.objects.create(username='TestUser')
         cls.group = Group.objects.create(
-            title=settings.GROUP_TITLE,
-            slug=settings.SLUG,
-            description=settings.DESCRIPTION
+            title=_config_tests.GROUP_TITLE,
+            slug=_config_tests.SLUG,
+            description=_config_tests.DESCRIPTION
         )
         cls.groupSecond = Group.objects.create(
-            title=GROUP_SECOND_TITLE,
-            slug=SLUG_2,
-            description=DESCRIPTION_2
+            title='Тестовая группа-2',
+            slug='test_slug_2',
+            description='Тестовое описание-2'
         )
         cls.post = Post.objects.create(
             author=cls.author,
-            text=settings.POST_TEXT,
+            text=_config_tests.POST_TEXT,
             group=cls.group
         )
         cls.POST_EDIT = reverse('posts:post_edit',
@@ -156,14 +152,14 @@ class PaginatorViewTests(TestCase):
     @classmethod
     def setUpClass(cls):
         super().setUpClass()
-        cls.author = User.objects.create(username=settings.USER_NAME)
+        cls.author = User.objects.create(username=_config_tests.USER_NAME)
         cls.group = Group.objects.create(
-            title=settings.GROUP_TITLE,
-            slug=settings.SLUG,
-            description=settings.DESCRIPTION
+            title=_config_tests.GROUP_TITLE,
+            slug=_config_tests.SLUG,
+            description=_config_tests.DESCRIPTION
         )
         posts = (Post(
-            text=settings.POST_TEXT,
+            text=_config_tests.POST_TEXT,
             group=cls.group,
             author=cls.author,
         ) for _ in range(13))

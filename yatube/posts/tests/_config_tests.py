@@ -1,0 +1,5 @@
+USER_NAME = 'TestAuthor'
+GROUP_TITLE = 'Тестовая группа'
+SLUG = 'test_slug'
+DESCRIPTION = 'Тестовое описание'
+POST_TEXT = 'Тестовый текст'
