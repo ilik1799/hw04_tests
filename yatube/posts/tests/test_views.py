@@ -36,7 +36,7 @@ class PostsPagesTests(TestCase):
         )
         cls.post = Post.objects.create(
             author=cls.author,
-            text=POST_TEXT,
+            text=settings.POST_TEXT,
             group=cls.group
         )
         cls.POST_EDIT = reverse('posts:post_edit',
@@ -133,7 +133,7 @@ class PostsPagesTests(TestCase):
         """Проверка отсутстствия постов не в той группе"""
         urls = (
             reverse('posts:group_list', kwargs={
-                'slug': self.group.slug}),
+                'slug': self.groupSecond.slug}),
             reverse('posts:profile', kwargs={'username': self.user.username})
         )
         for url in urls:
@@ -163,7 +163,7 @@ class PaginatorViewTests(TestCase):
             description=settings.DESCRIPTION
         )
         posts = (Post(
-            text=POST_TEXT,
+            text=settings.POST_TEXT,
             group=cls.group,
             author=cls.author,
         ) for _ in range(13))
