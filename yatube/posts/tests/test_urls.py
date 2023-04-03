@@ -1,19 +1,24 @@
 from http import HTTPStatus
 
 from django.contrib.auth import get_user_model
-from django.conf import settings
 from django.test import Client, TestCase
 from django.urls import reverse
 
 from ..models import Group, Post, User
 
+USER_NAME = 'TestAuthor'
+GROUP_TITLE = 'Тестовая группа'
+SLUG = 'test_slug'
+DESCRIPTION = 'Тестовое описание'
+POST_TEXT = 'Тестовый текст'
+
 User = get_user_model()
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')
 GROUP = reverse('posts:group_list',
-                kwargs={'slug': settings.SLUG})
+                kwargs={'slug': SLUG})
 PROFILE = reverse('posts:profile',
-                  kwargs={'username': settings.USER_NAME})
+                  kwargs={'username': USER_NAME})
 
 
 class PostURLTests(TestCase):
@@ -22,15 +27,15 @@ class PostURLTests(TestCase):
         super().setUpClass()
         # Созданим запись в БД для проверки доступности
         # адреса user/test-slug/
-        cls.author = User.objects.create(username=settings.USER_NAME)
+        cls.author = User.objects.create(username=USER_NAME)
         cls.group = Group.objects.create(
-            title=settings.GROUP_TITLE,
-            slug=settings.SLUG,
-            description=settings.DESCRIPTION
+            title=GROUP_TITLE,
+            slug=SLUG,
+            description=DESCRIPTION
         )
         cls.post = Post.objects.create(
             author=cls.author,
-            text=settings.POST_TEXT,
+            text=POST_TEXT,
             group=cls.group
         )
 
