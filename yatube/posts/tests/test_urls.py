@@ -7,16 +7,12 @@ from django.urls import reverse
 
 from ..models import Group, Post, User
 
-GROUP_TITLE = 'Тестовая группа'
-SLUG = 'test_slug'
-DESCRIPTION = 'Тестовое описание'
-POST_TEXT = 'Тестовый текст'
 
 User = get_user_model()
 INDEX = reverse('posts:index')
 CREATE = reverse('posts:post_create')
 GROUP = reverse('posts:group_list',
-                kwargs={'slug': SLUG})
+                kwargs={'slug': settings.SLUG})
 PROFILE = reverse('posts:profile',
                   kwargs={'username': settings.USER_NAME})
 
@@ -29,13 +25,13 @@ class PostURLTests(TestCase):
         # адреса user/test-slug/
         cls.author = User.objects.create(username=settings.USER_NAME)
         cls.group = Group.objects.create(
-            title=GROUP_TITLE,
-            slug=SLUG,
-            description=DESCRIPTION
+            title=settings.GROUP_TITLE,
+            slug=settings.SLUG,
+            description=settings.DESCRIPTION
         )
         cls.post = Post.objects.create(
             author=cls.author,
-            text=POST_TEXT,
+            text=settings.POST_TEXT,
             group=cls.group
         )
 

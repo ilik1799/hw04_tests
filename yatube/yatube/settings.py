@@ -146,3 +146,7 @@ POSTS_ON_PAGE: int = 10
 POST_LIMIT: int = 15
 
 USER_NAME = 'TestAuthor'
+GROUP_TITLE = 'Тестовая группа'
+SLUG = 'test_slug'
+DESCRIPTION = 'Тестовое описание'
+POST_TEXT = 'Тестовый текст'
