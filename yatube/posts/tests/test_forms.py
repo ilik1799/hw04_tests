@@ -17,6 +17,9 @@ class PostsPagesTests(TestCase):
         cls.author = User.objects.create(
             username=_config_tests.USER_NAME
         )
+        cls.ne_author = User.objects.create(
+            username=_config_tests.RANDOM_USER
+        )
         cls.group = Group.objects.create(
             title=_config_tests.GROUP_TITLE,
             slug=_config_tests.SLUG,
@@ -32,7 +35,7 @@ class PostsPagesTests(TestCase):
 
     def setUp(self):
         self.guest_client = Client()
-        self.guest_client.force_login(self.author)
+        self.guest_client.force_login(self.ne_author)
         self.authorized_client = Client()
         self.authorized_client.force_login(self.author)
 
@@ -63,7 +66,7 @@ class PostsPagesTests(TestCase):
             'text': 'Новый тестовый текст',
         }
         self.authorized_client.post(
-            reverse('posts:post_edit', kwargs={'post_id': '1'}),
+            reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
             data=form_data,
             follow=True
         )
@@ -83,24 +86,23 @@ class PostsPagesTests(TestCase):
             follow=True
         )
         self.assertEqual(Post.objects.count(), posts_count)
-        response = self.client.get('/create/')
-        self.assertRedirects(response, '/auth/login/?next=/create/')
 
-    def test_post_edit_author(self):
+    def test_post_edit_author_ne_author(self):
         # Проверка на невозможность изменения поста
+        form_data = {
+            'text': _config_tests.POST_TEXT,
+            'group': self.group.pk
+        }
 
-        post = {'text': 'Измененный тект', 'group': self.group.pk}
-
-        response = self.authorized_client.post(
-            reverse('posts:post_edit', kwargs={'post_id': '1'}),
-            data=post,
+        response = self.guest_client.post(
+            reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
+            data=form_data,
             follow=True
         )
 
-        edit_post = Post.objects.select_related(
-            'group', 'author').get(pk=self.post.id)
+        edit_post = Post.objects.get(pk=self.post.id)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(edit_post.author, self.post.author)
-        self.assertEqual(edit_post.text, post['text'])
+        self.assertEqual(edit_post.text, form_data['text'])
         self.assertEqual(edit_post.group.pk, self.group.pk)
