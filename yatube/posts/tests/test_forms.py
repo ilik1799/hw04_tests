@@ -3,11 +3,8 @@ from http import HTTPStatus
 from django.test import Client, TestCase
 from django.urls import reverse
 from posts.models import Group, Post, User
-
-
 PROFILE = reverse('posts:profile',
                   kwargs={'username': _config_tests.USER_NAME})
-UPDATED_TEXT = 'Обновленный текст'
 
 
 class PostsPagesTests(TestCase):
@@ -71,7 +68,7 @@ class PostsPagesTests(TestCase):
             follow=True
         )
         result = Post.objects.get(id=self.post.id)
-        self.assertNotEqual(result.text, UPDATED_TEXT)
+        self.assertNotEqual(result.text, _config_tests.POST_TEXT)
 
     def test_unauth_user_cant_publish_post(self):
         # Проверка на невозможность создания поста для не авторизованного гостя
@@ -89,14 +86,14 @@ class PostsPagesTests(TestCase):
 
     def test_post_edit_author_ne_author(self):
         # Проверка на невозможность изменения поста
-        form_data = {
-            'text': _config_tests.POST_TEXT,
+        form_data_test = {
+            'text': _config_tests.CHANGE_POST_TEXT,
             'group': self.group.pk
         }
 
         response = self.guest_client.post(
             reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
-            data=form_data,
+            data=form_data_test,
             follow=True
         )
 
@@ -104,5 +101,5 @@ class PostsPagesTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(edit_post.author, self.post.author)
-        self.assertEqual(edit_post.text, form_data['text'])
+        self.assertNotEqual(edit_post.text, form_data_test['text'])
         self.assertEqual(edit_post.group.pk, self.group.pk)
