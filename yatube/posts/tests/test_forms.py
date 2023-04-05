@@ -60,7 +60,8 @@ class PostsPagesTests(TestCase):
     def test_edit_post_form(self):
         # Проверка формы редактирования поста
         form_data = {
-            'text': 'Новый тестовый текст',
+            'text': _config_tests.POST_TEXT,
+            'change_text': _config_tests.CHANGE_POST_TEXT,
         }
         self.authorized_client.post(
             reverse('posts:post_edit', kwargs={'post_id': self.post.id}),
@@ -68,7 +69,7 @@ class PostsPagesTests(TestCase):
             follow=True
         )
         result = Post.objects.get(id=self.post.id)
-        self.assertNotEqual(result.text, _config_tests.POST_TEXT)
+        self.assertNotEqual(result.text, form_data['change_text'])
 
     def test_unauth_user_cant_publish_post(self):
         # Проверка на невозможность создания поста для не авторизованного гостя
